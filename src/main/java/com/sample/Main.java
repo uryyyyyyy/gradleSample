@@ -1,29 +1,36 @@
 package com.sample;
 
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.EbeanServer;
-import com.avaje.ebean.SqlRow;
-import com.sample.dao.rdb.Model1;
-import com.sample.util.MyLogger;
+import com.sample.util.ConfigProvider;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.logging.LogManager;
 
 public class Main {
-	public static void main(String args[]) throws ConfigurationException, SQLException {
-		MyLogger.logger.info("log");
-		PropertiesConfiguration config = new PropertiesConfiguration("project.properties");
-		MyLogger.logger.info(config.getString("foo"));
-		MyLogger.logger.info(String.valueOf(config.getInt("foo.bar")));
+	protected static final String LOGGING_PROPERTIES_DATA
+			= "handlers=java.util.logging.FileHandler\n"
+			+ ".level=INFO\n"
+			+ "java.util.logging.ConsoleHandler.level=INFO\n"
+			+ "java.util.logging.ConsoleHandler.formatter"
+			+ "=java.util.logging.SimpleFormatter\n"
+			+ "java.util.logging.FileHandler.pattern = ./logs/LoggingTester%u.log";
 
-		EbeanServer s = Ebean.getServer("maria");
-		String sql = "select count(*) as count from dual";
-		SqlRow row = s.createSqlQuery(sql).findUnique();
-		Integer i = row.getInteger("count");
-		System.out.println("Got " + i + " - DataSource good.");
+	public static void main(String args[]) throws ConfigurationException, SQLException, IOException {
+		InputStream configFile = new ByteArrayInputStream(LOGGING_PROPERTIES_DATA.getBytes("UTF-8"));
+		LogManager.getLogManager().readConfiguration(configFile);
+		Log log = LogFactory.getLog(Main.class);
+		PropertiesConfiguration config = ConfigProvider.config;
+		log.info(config.getString("foo"));
+		log.debug(config.getString("foo"));
+		log.fatal(config.getString("foo"));
+		log.error(config.getString("foo"));
+		log.info(String.valueOf(config.getInt("foo.bar")));
 	}
 }

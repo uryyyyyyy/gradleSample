@@ -14,12 +14,12 @@ repositories {
 }
 
 dependencies {
-	compile 'org.slf4j:slf4j-api:1.7.7'
 	compile 'org.avaje:ebean:2.7.7'
 	compile 'commons-configuration:commons-configuration:1.10'
-	compile 'org.mariadb.jdbc:mariadb-java-client:1.1.7'
+	compile 'org.apache.httpcomponents:httpclient:4.4'
 	compile 'org.mariadb.jdbc:mariadb-java-client:1.1.7'
 	compile 'org.projectlombok:lombok:1.14.8'
+	compile 'com.google.guava:guava:18.0'
 	testCompile 'junit:junit:4.11'
 	testRuntime 'com.h2database:h2:1.4.185'
 }
