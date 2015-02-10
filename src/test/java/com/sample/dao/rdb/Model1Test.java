@@ -1,6 +1,7 @@
 package com.sample.dao.rdb;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.EbeanServer;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -12,37 +13,22 @@ public class Model1Test {
 
 	@Test
 	public void test() {
-		//System.setProperty("catalina.base", "D:/apps/tomcat6");
-		//System.setProperty("ebean.props.file", "D:/apps/tomcat6/conf/zsite.ebean.properties");
-		//GlobalProperties.put("ebean.debug.sql", "true");
+		EbeanServer s = Ebean.getServer("h2");
 
 		Model1 e = new Model1();
-		e.name = "test";
-		e.description = "something";
-
-		// will insert
-		Ebean.save(e);
-
+		e.setId(3);
+		//Model1 e = new Model1(null, "test", "something", null);
+		s.save(e);
 		e.description = "changed";
 
 		// this will update
-		Ebean.save(e);
+		s.save(e);
 
 		// find the inserted entity by its id
-		Model1 e2 = Ebean.find(Model1.class, e.getId());
-		System.out.println("Got "+e2.getDescription());
+		Model1 e2 = s.find(Model1.class, e.id);
+		System.out.println("Got "+e2.description);
 
-		Ebean.delete(e);
-		// can use delete by id when you don't have the bean
-		//Ebean.delete(ESimple.class, e.getId());
+		s.delete(e);
 	}
 
-	@Test
-	public void test2() throws SQLException {
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/sample", "root", "root");
-		Statement stmt = connection.createStatement();
-		stmt.executeUpdate("CREATE TABLE a (id int not null primary key, value varchar(20))");
-		stmt.close();
-		connection.close();
-	}
 }
