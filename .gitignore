@@ -2,6 +2,7 @@
 gradle/
 *.iml
 .gradle/
+log/
 build/
 *.ipr
 *.iws
