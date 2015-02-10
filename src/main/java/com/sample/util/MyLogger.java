@@ -12,9 +12,6 @@ public class MyLogger {
 		try {
 			final String LOGGER_NAME = "MyLogger";
 			File newdir = new File("./log");
-			if(!newdir.mkdir()){
-				throw new RuntimeException();
-			}
 			Logger logger = Logger.getLogger(LOGGER_NAME);
 			Handler handler = new FileHandler("./log/java%u.log");
 			handler.setFormatter(new SimpleFormatter());
